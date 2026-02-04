@@ -1,0 +1,238 @@
+index.html
+musica.mp3
+boda.mp3
+rauw1.jpg
+rauw2.jpg
+rauw3.jpg<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Esmerlin responde las preguntas mi amorcito 💖</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    padding:20px;
+    color:white;
+    text-align:center;
+    overflow-x:hidden;
+}
+
+/* Fondo fotos */
+@keyframes fondo{
+    0%{background-image:url("rauw1.jpg");}
+    33%{background-image:url("rauw2.jpg");}
+    66%{background-image:url("rauw3.jpg");}
+    100%{background-image:url("rauw1.jpg");}
+}
+
+body{
+    background-size:cover;
+    background-position:center;
+    animation:fondo 18s infinite;
+}
+
+.container{
+    background:rgba(0,0,0,0.88);
+    padding:25px;
+    border-radius:20px;
+    max-width:600px;
+    margin:auto;
+}
+
+button{
+    padding:10px 18px;
+    margin:6px;
+    border:none;
+    border-radius:12px;
+    background:#222;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#444;
+}
+
+.result{
+    margin-top:20px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+#final{
+    display:none;
+    margin-top:25px;
+}
+
+/* corazones */
+.heart{
+    position:fixed;
+    top:-20px;
+    animation:caer 4s linear forwards;
+}
+
+@keyframes caer{
+    to{
+        transform:translateY(110vh);
+        opacity:0;
+    }
+}
+
+#btnSi{
+    position:relative;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Música fondo -->
+<audio autoplay loop>
+  <source src="musica.mp3">
+</audio>
+
+<!-- Sonido boda -->
+<audio id="bodaSound">
+  <source src="boda.mp3">
+</audio>
+
+<div class="container">
+
+<h1>💖 Esmerlin responde las preguntas mi amorcito 💖</h1>
+
+<form id="quiz"></form>
+
+<button onclick="mostrarResultado()">✨ Ver mi resultado</button>
+
+<div id="resultado" class="result"></div>
+
+<button id="copiarBtn" style="display:none;" onclick="copiarResultado()">📋 Copiar resultado</button>
+
+<div id="final">
+    <h2>💍 ¿Te quieres casar con Eduarlin?</h2>
+    <button id="btnSi">Sí</button>
+    <button onclick="respuestaNo()">No</button>
+    <p id="mensajeFinal"></p>
+</div>
+
+</div>
+
+<script>
+let puntos = 0;
+let textoFinal = "";
+
+const preguntas = [
+"¿Cuál serie te gusta más?",
+"¿Qué tipo de película prefieres?",
+"¿Qué dibujos animados te gustan más?",
+"¿Qué haces en tu tiempo libre?",
+"¿Qué música prefieres escuchar?",
+"¿Tu plan perfecto sería?",
+"¿Cómo te describen tus amigos?",
+"¿Qué prefieres ver por la noche?",
+"¿Con quién te gusta pasar más tiempo?",
+"¿Amas a Eduarlin?",
+"¿Qué tan importante es Eduarlin para ti?"
+];
+
+const opciones = [
+[["Stranger Things",2],["Románticas",1],["Anime",3]],
+[["Acción",3],["Comedia",2],["Drama",1]],
+[["Clásicos",2],["Anime",3],["No veo mucho",1]],
+[["Videojuegos",3],["Salir con amigos",2],["Escuchar música/leer",1]],
+[["Urbano/Reggaetón",3],["Variada",2],["Baladas",1]],
+[["Fiesta",3],["Cine",2],["Casa tranquila",1]],
+[["Divertida/o",2],["Valiente",3],["Tierno/a",1]],
+[["Películas épicas",3],["Series cortas",2],["Romance",1]],
+[["Familia",1],["Amigos",2],["Persona especial",3]],
+[["Sí, muchísimo ❤️",5],["Sí, bastante",3],["Normal",1]],
+[["Lo/la amo demasiado 💖",5],["Mucho",3],["Algo",1]]
+];
+
+const quiz = document.getElementById("quiz");
+
+preguntas.forEach((pregunta,i)=>{
+    let p=document.createElement("p");
+    p.innerText=(i+1)+". "+pregunta;
+    quiz.appendChild(p);
+
+    opciones[i].forEach(op=>{
+        let label=document.createElement("label");
+        label.style.display="block";
+
+        let radio=document.createElement("input");
+        radio.type="radio";
+        radio.name="q"+i;
+        radio.value=op[1];
+
+        label.appendChild(radio);
+        label.append(" "+op[0]);
+
+        quiz.appendChild(label);
+    });
+});
+
+function mostrarResultado(){
+
+    puntos=0;
+
+    const radios=document.querySelectorAll("input[type=radio]:checked");
+
+    if(radios.length<11){
+        alert("Responde todas las preguntas 😊");
+        return;
+    }
+
+    radios.forEach(r=>puntos+=parseInt(r.value));
+
+    let tipo="";
+
+    if(puntos<=18) tipo="🌙 Tranquila y sentimental";
+    else if(puntos<=26) tipo="😄 Alegre y sociable";
+    else tipo="💖 Súper romántica y enamorada de Eduarlin";
+
+    textoFinal = `💖 Resultado de Esmerlin:
+Puntos: ${puntos}
+Tipo: ${tipo}`;
+
+    document.getElementById("resultado").innerText = textoFinal;
+
+    document.getElementById("copiarBtn").style.display="inline-block";
+    document.getElementById("final").style.display="block";
+}
+
+/* copiar resultado */
+function copiarResultado(){
+    navigator.clipboard.writeText(textoFinal);
+    alert("Resultado copiado 💕");
+}
+
+/* botón que huye */
+const btnSi=document.getElementById("btnSi");
+btnSi.addEventListener("mouseover",()=>{
+    btnSi.style.left=Math.random()*200-100+"px";
+    btnSi.style.top=Math.random()*60-30+"px";
+});
+
+/* respuesta boda */
+function respuestaNo(){
+    document.getElementById("bodaSound").play();
+    document.getElementById("mensajeFinal").innerText="💍 ¡Se casan! 💖";
+
+    setInterval(()=>{
+        const el=document.createElement("div");
+        el.className="heart";
+        const cosas=["❤️","💖","27","19"];
+        el.innerText=cosas[Math.floor(Math.random()*cosas.length)];
+        el.style.left=Math.random()*100+"vw";
+        el.style.fontSize=(18+Math.random()*20)+"px";
+        document.body.appendChild(el);
+        setTimeout(()=>el.remove(),4000);
+    },150);
+}
+</script>
+
+</body>
+</html>
